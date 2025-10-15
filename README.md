@@ -34,4 +34,17 @@ Replace `{experiment name}` with one of the following:
 - `underactuation`: visualizes the grasping of a cylindrical object by an eleven-segment model resulting from the contraction of two symmetrical HM beams spanning all eleven segments.
 
 ## Citation
-TBD
+```
+@article{marzougui2025,
+  title = {Exploring the Evolutionary Adaptations of the Unique Seahorse Tail\&\#x2019;s Muscle Architecture through {\textexclamdown}i{\textquestiondown}in Silico{\textexclamdown}/I{\textquestiondown} Modelling and Robotic Prototyping},
+  author = {Marzougui, Dries and Das, Riddhi and Mazzolai, Barbara and Adriaens, Dominique and {wyffels}, Francis},
+  year = {2025},
+  journal = {Journal of The Royal Society Interface},
+  volume = {22},
+  number = {226},
+  eprint = {https://royalsocietypublishing.org/doi/pdf/10.1098/rsif.2024.0876},
+  pages = {20240876},
+  doi = {10.1098/rsif.2024.0876},
+}
+
+```
