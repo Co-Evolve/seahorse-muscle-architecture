@@ -200,15 +200,16 @@ def default_seahorse_segment_specification(
 def default_beam_actuation_specification(
         hm_segment_span: int,
         mvm_enabled: bool,
-        p_control: bool
+        p_control: bool,
+        hm_strain: float,
+        mvm_strain: float
         ) -> SeahorseTendonActuationSpecification:
     mvm_beam_actuation_specification = SeahorseMVMTendonActuationSpecification(
             enabled=mvm_enabled,
-            contraction_factor=0.5,
-            relaxation_factor=1.5,
             beam_width=0.001,
             p_control_kp=1000,
-            damping=1
+            damping=1,
+            strain=mvm_strain
             )
     hm_beam_actuation_specification = SeahorseHMMTendonActuationSpecification(
             p_control=p_control,
@@ -217,7 +218,8 @@ def default_beam_actuation_specification(
             segment_span=hm_segment_span,
             damping=0.01,
             f_control_gear=10,
-            routing_specifications=[]
+            routing_specifications=[],
+            strain=hm_strain
             )
 
     return SeahorseTendonActuationSpecification(
@@ -231,12 +233,18 @@ def default_seahorse_morphology_specification(
         num_segments: int,
         hm_segment_span: int,
         p_control: bool = True,
-        mvm_enabled: bool = True
+        mvm_enabled: bool = True,
+        mvm_strain: float = 0.0,
+        hm_strain: float = 0.0
         ) -> SeahorseMorphologySpecification:
     segment_specifications = [default_seahorse_segment_specification(segment_index=segment_index) for segment_index in
                               range(num_segments)]
     beam_actuation_specification = default_beam_actuation_specification(
-            hm_segment_span=hm_segment_span, mvm_enabled=mvm_enabled, p_control=p_control
+            hm_segment_span=hm_segment_span,
+            mvm_enabled=mvm_enabled,
+            p_control=p_control,
+            hm_strain=hm_strain,
+            mvm_strain=mvm_strain
             )
 
     morphology_specification = SeahorseMorphologySpecification(
