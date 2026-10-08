@@ -1,0 +1,62 @@
+# Publishes the Tendon Designer web app to GitHub Pages:
+# https://co-evolve.github.io/seahorse-muscle-architecture/
+#
+# The app is static (MuJoCo runs as WebAssembly in the visitor's browser), so the
+# site is just seahorse_muscle_architecture/silico/tendon_designer/web/ plus the
+# student guide. web/model/ is committed; regenerate it with export_assets.py
+# after morphology changes.
+name: Tendon Designer (GitHub Pages)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "seahorse_muscle_architecture/silico/tendon_designer/web/**"
+      - "seahorse_muscle_architecture/silico/tendon_designer/README.md"
+      - ".github/workflows/tendon-designer-pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time; never cancel a deployment that is in progress.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Assemble site
+        run: |
+          app=seahorse_muscle_architecture/silico/tendon_designer
+          mkdir -p _site
+          cp -R "$app/web/." _site/
+          cp "$app/README.md" _site/README.md
+          # Developer test pages are not part of the student-facing app.
+          rm -f _site/dev_*.html
+          test -f _site/index.html
+          test -f _site/model/catalog.json
+          test -f _site/vendor/mujoco/mujoco.wasm
+          du -sh _site
+
+      - uses: actions/configure-pages@v6
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
