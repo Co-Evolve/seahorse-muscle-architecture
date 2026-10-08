@@ -8,6 +8,16 @@ The app also has a **Help** panel. The buttons and panels can change between ver
 
 ## Start the app
 
+### Online (easiest)
+
+Open **https://co-evolve.github.io/seahorse-muscle-architecture/** in Google Chrome or Microsoft Edge.
+
+The simulation runs in your browser, on your own computer. The website only sends the app files to your browser. Your designs stay on your computer until you send them to someone.
+
+The browser keeps your current design, but it can clear this. Use **Save** to download your design as a `.json` file, and keep these files in a safe folder.
+
+### On your own computer (from the repository)
+
 1. Open a terminal in the folder of the repository (`seahorse-muscle-architecture`).
 2. Activate the Python environment. Use the command for your installation:
    - Conda: `conda activate seahorse-muscle-architecture`
@@ -21,7 +31,7 @@ The app also has a **Help** panel. The buttons and panels can change between ver
 4. The browser opens the app. If the browser does not open, copy the address from the terminal into the browser.
 5. To stop the app, press `Ctrl+C` in the terminal.
 
-The app runs only on your computer. It does not send data to the internet.
+This version runs only on your computer. It does not send data to the internet.
 
 ## Words that the app uses
 
