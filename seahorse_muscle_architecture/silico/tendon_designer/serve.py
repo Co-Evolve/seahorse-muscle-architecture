@@ -1,4 +1,4 @@
-"""Serve the Tendon Designer web app locally and open it in the browser.
+"""Serve the Seahorse muscle playground web app locally and open it in the browser.
 
     python -m seahorse_muscle_architecture.silico.tendon_designer.serve [--port 8765] [--no-browser]
 
@@ -53,7 +53,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def log_message(self, format: str, *args) -> None:  # noqa: A002 - signature from base class
         # Only report errors; a page load requests ~40 files.
         if len(args) >= 2 and str(args[1]).startswith(("4", "5")):
-            sys.stderr.write(f"[tendon designer] {self.address_string()} {format % args}\n")
+            sys.stderr.write(f"[muscle playground] {self.address_string()} {format % args}\n")
 
 
 def find_free_port(host: str, start: int, tries: int = 20) -> int:
@@ -68,7 +68,7 @@ def find_free_port(host: str, start: int, tries: int = 20) -> int:
 
 
 def main(argv: list[str] | None = None) -> None:
-    parser = argparse.ArgumentParser(description="Serve the Tendon Designer web app.")
+    parser = argparse.ArgumentParser(description="Serve the Seahorse muscle playground web app.")
     parser.add_argument("--port", type=int, default=8765, help="port to use (the next free one is taken if busy)")
     parser.add_argument("--host", default="127.0.0.1", help="interface to bind (default: only this computer)")
     parser.add_argument("--no-browser", action="store_true", help="do not open a browser window")
@@ -86,7 +86,7 @@ def main(argv: list[str] | None = None) -> None:
     handler = functools.partial(Handler, directory=str(web_dir))
     server = http.server.ThreadingHTTPServer((args.host, port), handler)
     url = f"http://{'localhost' if args.host in ('127.0.0.1', '0.0.0.0') else args.host}:{port}/"
-    print(f"Tendon Designer running at {url}  (press Ctrl+C to stop)")
+    print(f"Seahorse muscle playground running at {url}  (press Ctrl+C to stop)")
     if not args.no_browser:
         threading.Timer(0.6, lambda: webbrowser.open(url)).start()
     try:

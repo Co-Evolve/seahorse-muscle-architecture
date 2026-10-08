@@ -1,4 +1,4 @@
-"""Turn a Tendon Designer configuration JSON into a standalone MJCF folder.
+"""Turn a Seahorse muscle playground configuration JSON into a standalone MJCF folder.
 
 The folder holds ``<name>.xml`` plus every mesh it references, and a copy of the config
 (``<name>.config.json``). It loads in plain MuJoCo (``mujoco.MjModel.from_xml_path``,
@@ -66,8 +66,8 @@ def summary(
 def main(
         argv: Optional[list] = None
         ) -> None:
-    parser = argparse.ArgumentParser(description="Build a standalone MJCF folder from a Tendon Designer config.")
-    parser.add_argument("config", type=Path, help="configuration JSON saved by the Tendon Designer")
+    parser = argparse.ArgumentParser(description="Build a standalone MJCF folder from a Seahorse muscle playground config.")
+    parser.add_argument("config", type=Path, help="configuration JSON saved by the Seahorse muscle playground")
     parser.add_argument("--out-dir", type=Path, required=True)
     parser.add_argument("--name", default=None, help="XML file name without .xml (default: config file name)")
     parser.add_argument("--num-segments", type=int, default=11)

@@ -3,7 +3,9 @@
   "version": 1,
   "name": "Empty",
   "description": "No tendons. Start from scratch.",
-  "params": {},
+  "params": {
+    "orientation": "hanging"
+  },
   "free_points": [],
   "tendons": []
 }

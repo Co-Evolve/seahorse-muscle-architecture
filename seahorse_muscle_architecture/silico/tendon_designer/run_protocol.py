@@ -1,4 +1,4 @@
-"""Run a simple activation protocol on a Tendon Designer configuration, headless, and save a CSV.
+"""Run a simple activation protocol on a Seahorse muscle playground configuration, headless, and save a CSV.
 
 Protocol: optional settle time at a = 0, then a linear ramp of the activation from 0 to ``level``
 over ``ramp`` seconds for the tendons of the chosen groups (default: every actuated tendon),
@@ -370,7 +370,7 @@ def write_csv(
 def main(
         argv: Optional[list] = None
         ) -> None:
-    parser = argparse.ArgumentParser(description="Run a ramp-and-hold activation protocol on a Tendon Designer config.")
+    parser = argparse.ArgumentParser(description="Run a ramp-and-hold activation protocol on a Seahorse muscle playground config.")
     parser.add_argument("config", type=Path)
     parser.add_argument("--out", type=Path, default=None, help="CSV file (default: <config>_protocol.csv)")
     parser.add_argument("--groups", nargs="*", default=None, help="tendon groups to activate (default: all actuated)")

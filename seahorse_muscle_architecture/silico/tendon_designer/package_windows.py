@@ -1,4 +1,4 @@
-"""Package the Tendon Designer as a self-contained zip for a Windows user.
+"""Package the Seahorse muscle playground as a self-contained zip for a Windows user.
 
 The zip holds the static web app, a double-click launcher and a small web server
 (Python if available, otherwise the one built into Windows PowerShell). No
@@ -8,8 +8,8 @@ conda/repo needed on the receiving side.
 
 Layout of the zip:
 
-    TendonDesigner/
-      Start Tendon Designer.bat
+    SeahorseMusclePlayground/
+      Start Seahorse muscle playground.bat
       START HERE.txt
       app/        (contents of web/, without the dev pages, plus README.md)
       tools/      (serve.py, serve.ps1)
@@ -30,8 +30,8 @@ WINDOWS_DIR = PACKAGE_DIR / "windows"
 REPO_ROOT = PACKAGE_DIR.parents[2]
 
 EXCLUDED_WEB_FILES = {"dev_sim.html", "dev_editor.html", ".DS_Store"}
-ZIP_NOTE = ("> **Received the Tendon Designer as a zip?** Then you do not need the commands below:\n"
-            "> double-click `Start Tendon Designer.bat` (see `START HERE.txt`).\n\n")
+ZIP_NOTE = ("> **Received the Seahorse muscle playground as a zip?** Then you do not need the commands below:\n"
+            "> double-click `Start Seahorse muscle playground.bat` (see `START HERE.txt`).\n\n")
 
 
 def version_string() -> str:
@@ -59,7 +59,7 @@ def build(
         raise SystemExit("web/model/ is missing: run export_assets.py first.")
 
     with tempfile.TemporaryDirectory() as tmp:
-        root = Path(tmp) / "TendonDesigner"
+        root = Path(tmp) / "SeahorseMusclePlayground"
         app = root / "app"
         tools = root / "tools"
 
@@ -74,14 +74,14 @@ def build(
         shutil.copy2(PACKAGE_DIR / "serve.py", tools / "serve.py")
         # Windows-native line endings for the files a Windows user opens or runs.
         (tools / "serve.ps1").write_bytes(to_crlf((WINDOWS_DIR / "serve.ps1").read_text(encoding="utf-8")))
-        (root / "Start Tendon Designer.bat").write_bytes(
-                to_crlf((WINDOWS_DIR / "Start Tendon Designer.bat").read_text(encoding="utf-8"))
+        (root / "Start Seahorse muscle playground.bat").write_bytes(
+                to_crlf((WINDOWS_DIR / "Start Seahorse muscle playground.bat").read_text(encoding="utf-8"))
                 )
         start_here = (WINDOWS_DIR / "START HERE.txt").read_text(encoding="utf-8")
         (root / "START HERE.txt").write_bytes(to_crlf(start_here.replace("{VERSION}", version_string())))
 
         out_dir.mkdir(parents=True, exist_ok=True)
-        zip_path = out_dir / f"TendonDesigner-{datetime.date.today().isoformat()}.zip"
+        zip_path = out_dir / f"SeahorseMusclePlayground-{datetime.date.today().isoformat()}.zip"
         with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
             for path in sorted(root.rglob("*")):
                 if path.is_file():
@@ -90,7 +90,7 @@ def build(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Package the Tendon Designer for Windows.")
+    parser = argparse.ArgumentParser(description="Package the Seahorse muscle playground for Windows.")
     parser.add_argument("--out", type=Path, default=REPO_ROOT / "dist", help="output folder for the zip")
     args = parser.parse_args()
     zip_path = build(args.out)

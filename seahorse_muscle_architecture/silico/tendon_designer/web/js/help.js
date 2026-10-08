@@ -62,7 +62,7 @@ const SECTIONS = [
         h("li", {}, h("b", {}, "Position"), " tendons try to become a set percentage shorter (like a muscle that contracts to a length)."),
         h("li", {}, h("b", {}, "Passive"), " tendons are not driven; with a stiffness they act like elastic bands.")),
       h("p", {}, "When you release a slider, the tail does not always spring back: the joint springs of the model are very weak. Make them stiffer in ", h("b", {}, "Body parameters"), " if you want the tail to return to straight."),
-      h("p", {}, h("b", {}, "Upright / hanging"), " turns the whole tail. ", h("b", {}, "Gravity"), " switches the weight of the parts on or off. ", h("b", {}, "Reset"), " puts the tail back to straight; the sliders keep their values."),
+      h("p", {}, h("b", {}, "Upright / hanging"), " turns the whole tail. The tail hangs by default, as in the paper's experiments. ", h("b", {}, "Gravity"), " switches the weight of the parts on or off. ", h("b", {}, "Reset"), " puts the tail back to straight; the sliders keep their values."),
     ],
   },
   {
@@ -117,7 +117,7 @@ export class HelpOverlay {
     this.content = h("div", { class: "help-content" });
     const close = h("button", { class: "icon-btn help-close", "aria-label": "Close help", onClick: () => this.close() }, icon("close", 18));
     this.el.append(h("div", { class: "help-panel" },
-      h("header", { class: "help-head" }, h("div", {}, h("h1", { id: "help-title", class: "help-title" }, "How to use the Tendon Designer"),
+      h("header", { class: "help-head" }, h("div", {}, h("h1", { id: "help-title", class: "help-title" }, "How to use the Seahorse muscle playground"),
         h("p", { class: "help-lede" }, "Design artificial tendons for a seahorse tail, pull them, and measure how the tail bends.")), close),
       h("div", { class: "help-body" }, this.nav, this.content)));
     this.el.addEventListener("pointerdown", (e) => { if (e.target === this.el) this.close(); });

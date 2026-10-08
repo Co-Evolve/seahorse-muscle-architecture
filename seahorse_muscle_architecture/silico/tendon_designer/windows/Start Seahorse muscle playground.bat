@@ -1,7 +1,7 @@
 @echo off
 setlocal
 cd /d "%~dp0"
-title Tendon Designer
+title Seahorse muscle playground
 
 if not exist "app\index.html" (
   echo.
@@ -14,7 +14,7 @@ if not exist "app\index.html" (
 )
 
 echo.
-echo   Starting the Tendon Designer...
+echo   Starting the Seahorse muscle playground...
 echo   Your browser opens in a moment. Keep this window open while you work.
 echo   Close this window to stop the app.
 echo.

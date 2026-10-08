@@ -46,7 +46,8 @@ export function newConfig(name = "My configuration") {
     version: CONFIG_VERSION,
     name,
     description: "",
-    params: {},
+    // Hanging by default, like the paper's experiments (tail attached upside down).
+    params: { orientation: "hanging" },
     free_points: [],
     tendons: [],
   };

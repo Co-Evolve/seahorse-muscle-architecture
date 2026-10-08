@@ -1,6 +1,6 @@
-# Tendon Designer
+# Seahorse muscle playground
 
-The Tendon Designer is a browser app. With it, you put tendons (artificial muscles) on a model of the seahorse tail. Then you simulate the tail and measure how it bends.
+The Seahorse muscle playground is a browser app. With it, you put tendons (artificial muscles) on a model of the seahorse tail. Then you simulate the tail and measure how it bends.
 
 You do not need to write code. You click holes in the plates of the tail to make a tendon. The app simulates the tail with the MuJoCo physics engine, and it shows the result immediately. You can save your design as a file and send it to your supervisor.
 

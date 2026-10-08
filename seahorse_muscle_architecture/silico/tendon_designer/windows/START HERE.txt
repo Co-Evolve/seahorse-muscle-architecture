@@ -1,11 +1,11 @@
-TENDON DESIGNER - START HERE
-============================
+SEAHORSE MUSCLE PLAYGROUND - START HERE
+=======================================
 
 1. Extract the zip file first.
    Right-click the zip file and choose "Extract All...". Do not run the app
    from inside the zip.
 
-2. Open the extracted folder and double-click "Start Tendon Designer.bat".
+2. Open the extracted folder and double-click "Start Seahorse muscle playground.bat".
    A black window opens and then your web browser opens the app.
    - If Windows shows "Windows protected your PC", click "More info" and then
      "Run anyway". This file only starts a small local web server.

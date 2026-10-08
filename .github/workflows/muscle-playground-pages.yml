@@ -1,11 +1,11 @@
-# Publishes the Tendon Designer web app to GitHub Pages:
+# Publishes the Seahorse muscle playground web app to GitHub Pages:
 # https://co-evolve.github.io/seahorse-muscle-architecture/
 #
 # The app is static (MuJoCo runs as WebAssembly in the visitor's browser), so the
 # site is just seahorse_muscle_architecture/silico/tendon_designer/web/ plus the
 # student guide. web/model/ is committed; regenerate it with export_assets.py
 # after morphology changes.
-name: Tendon Designer (GitHub Pages)
+name: Seahorse muscle playground (GitHub Pages)
 
 on:
   push:
@@ -13,7 +13,7 @@ on:
     paths:
       - "seahorse_muscle_architecture/silico/tendon_designer/web/**"
       - "seahorse_muscle_architecture/silico/tendon_designer/README.md"
-      - ".github/workflows/tendon-designer-pages.yml"
+      - ".github/workflows/muscle-playground-pages.yml"
   workflow_dispatch:
 
 permissions:
