@@ -1,4 +1,4 @@
-# Minimal static web server for the Tendon Designer, used when Python is not installed.
+# Minimal static web server for the Seahorse muscle playground, used when Python is not installed.
 # Works with Windows PowerShell 5.1 (built into Windows 10/11) and PowerShell 7.
 # Serves the app folder on http://localhost:<port>/ with explicit MIME types
 # (the Windows registry often maps .js to text/plain, which breaks ES modules).
@@ -51,7 +51,7 @@ if ($null -eq $listener) {
 }
 
 $url = "http://localhost:$Port/"
-Write-Host "  Tendon Designer running at $url"
+Write-Host "  Seahorse muscle playground running at $url"
 Write-Host "  Keep this window open while you work. Close it to stop the app."
 if (-not $NoBrowser) { Start-Process $url }
 

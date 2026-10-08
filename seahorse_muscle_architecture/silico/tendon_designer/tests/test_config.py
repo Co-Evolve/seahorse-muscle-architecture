@@ -1,4 +1,4 @@
-"""Tests for the Python side of the Tendon Designer (config.py, build_mjcf.py, run_protocol.py).
+"""Tests for the Python side of the Seahorse muscle playground (config.py, build_mjcf.py, run_protocol.py).
 
 Run from the repository root:
     .venv/bin/python -m unittest seahorse_muscle_architecture.silico.tendon_designer.tests.test_config -v

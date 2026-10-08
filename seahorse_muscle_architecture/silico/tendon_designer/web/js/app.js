@@ -1,4 +1,4 @@
-// Tendon Designer: UI shell. Loads the real modules (sim.js, render3d.js, slice_editor.js,
+// Seahorse muscle playground: UI shell. Loads the real modules (sim.js, render3d.js, slice_editor.js,
 // config.js) and falls back to clearly-labelled stand-ins (mock_sim.js) when one is missing.
 // Owns the app state: current config (+ undo history, autosave), the live Simulation,
 // activations, play/pause, and wires the panels together.
@@ -28,7 +28,7 @@ window.__tendonDesigner = state; // handy for debugging in the browser console
 
 // ------------------------------------------------------------------ module loading
 async function tryImport(path) {
-  try { return await import(path); } catch (e) { console.warn(`[tendon designer] could not load ${path}:`, e); return null; }
+  try { return await import(path); } catch (e) { console.warn(`[muscle playground] could not load ${path}:`, e); return null; }
 }
 
 async function loadModules() {

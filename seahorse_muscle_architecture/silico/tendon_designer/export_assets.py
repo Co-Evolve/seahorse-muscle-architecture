@@ -1,4 +1,4 @@
-"""Export the base model and site catalogue used by the Tendon Designer web app.
+"""Export the base model and site catalogue used by the Seahorse muscle playground web app.
 
 Writes into ``web/model/``:
 
@@ -359,7 +359,7 @@ def deduplicate_meshes(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Export the Tendon Designer base model and catalogue.")
+    parser = argparse.ArgumentParser(description="Export the Seahorse muscle playground base model and catalogue.")
     parser.add_argument("--num-segments", type=int, default=11)
     parser.add_argument("--out-dir", type=Path, default=WEB_MODEL_DIR)
     args = parser.parse_args()

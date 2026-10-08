@@ -1,4 +1,4 @@
-"""Tendon Designer configurations in Python: load, validate and apply them to the MJCF model.
+"""Seahorse muscle playground configurations in Python: load, validate and apply them to the MJCF model.
 
 This is the Python half of the "config -> MJCF" contract in ``DESIGN.md``. It produces the
 same sites, pulleys, actuators, sensors and parameter overrides as ``web/js/model_builder.js``

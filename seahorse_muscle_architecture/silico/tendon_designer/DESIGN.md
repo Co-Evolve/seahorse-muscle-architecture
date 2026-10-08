@@ -1,4 +1,4 @@
-# Tendon Designer: design notes and contracts
+# Seahorse muscle playground: design notes and contracts
 
 A browser app in which a (non-programmer) student defines tendon configurations on
 the seahorse tail model by clicking on per-segment slice views, simulates them live

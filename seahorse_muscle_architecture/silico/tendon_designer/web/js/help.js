@@ -117,7 +117,7 @@ export class HelpOverlay {
     this.content = h("div", { class: "help-content" });
     const close = h("button", { class: "icon-btn help-close", "aria-label": "Close help", onClick: () => this.close() }, icon("close", 18));
     this.el.append(h("div", { class: "help-panel" },
-      h("header", { class: "help-head" }, h("div", {}, h("h1", { id: "help-title", class: "help-title" }, "How to use the Tendon Designer"),
+      h("header", { class: "help-head" }, h("div", {}, h("h1", { id: "help-title", class: "help-title" }, "How to use the Seahorse muscle playground"),
         h("p", { class: "help-lede" }, "Design artificial tendons for a seahorse tail, pull them, and measure how the tail bends.")), close),
       h("div", { class: "help-body" }, this.nav, this.content)));
     this.el.addEventListener("pointerdown", (e) => { if (e.target === this.el) this.close(); });
