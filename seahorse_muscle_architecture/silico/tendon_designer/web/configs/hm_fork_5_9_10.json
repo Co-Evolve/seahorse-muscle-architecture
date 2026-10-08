@@ -3,7 +3,9 @@
   "version": 1,
   "name": "HM fork 5→9 + 10",
   "description": "Ventral HM pair from segment 5 to segment 9 (holes 9, 5, 0 in segments 6-8). At segment 8 each HM splits: the branch passes hole 0 of segment 9 and ends at the corner of segment 10. One actuator pulls both ends.",
-  "params": {},
+  "params": {
+    "orientation": "hanging"
+  },
   "free_points": [],
   "tendons": [
     {

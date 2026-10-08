@@ -3,7 +3,9 @@
   "version": 1,
   "name": "MVM chain",
   "description": "One short MVM per pair of neighbouring segments on each side (20 in total), through the MVM holes. Position control: kp 1000, max force 1000 N, up to 26 % shortening.",
-  "params": {},
+  "params": {
+    "orientation": "hanging"
+  },
   "free_points": [],
   "tendons": [
     {

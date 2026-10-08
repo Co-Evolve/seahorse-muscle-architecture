@@ -62,7 +62,7 @@ const SECTIONS = [
         h("li", {}, h("b", {}, "Position"), " tendons try to become a set percentage shorter (like a muscle that contracts to a length)."),
         h("li", {}, h("b", {}, "Passive"), " tendons are not driven; with a stiffness they act like elastic bands.")),
       h("p", {}, "When you release a slider, the tail does not always spring back: the joint springs of the model are very weak. Make them stiffer in ", h("b", {}, "Body parameters"), " if you want the tail to return to straight."),
-      h("p", {}, h("b", {}, "Upright / hanging"), " turns the whole tail. ", h("b", {}, "Gravity"), " switches the weight of the parts on or off. ", h("b", {}, "Reset"), " puts the tail back to straight; the sliders keep their values."),
+      h("p", {}, h("b", {}, "Upright / hanging"), " turns the whole tail. The tail hangs by default, as in the paper's experiments. ", h("b", {}, "Gravity"), " switches the weight of the parts on or off. ", h("b", {}, "Reset"), " puts the tail back to straight; the sliders keep their values."),
     ],
   },
   {

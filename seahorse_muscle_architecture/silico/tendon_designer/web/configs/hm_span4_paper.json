@@ -3,7 +3,9 @@
   "version": 1,
   "name": "HM span 4 (paper)",
   "description": "Two symmetric ventral HMs from segment 6 to segment 10 (tip): midline start hole, holes 9, 5, 0 in segments 7-9, corner anchor at the tip. Same routing as the paper (hm_segment_span = 4).",
-  "params": {},
+  "params": {
+    "orientation": "hanging"
+  },
   "free_points": [],
   "tendons": [
     {

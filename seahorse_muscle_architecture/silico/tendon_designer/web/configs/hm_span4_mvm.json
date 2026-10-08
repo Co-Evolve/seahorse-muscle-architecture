@@ -3,7 +3,9 @@
   "version": 1,
   "name": "HM span 4 + MVMs",
   "description": "Ventral HM pair from segment 6 to 10 (paper routing) plus one MVM per joint and side.",
-  "params": {},
+  "params": {
+    "orientation": "hanging"
+  },
   "free_points": [],
   "tendons": [
     {
