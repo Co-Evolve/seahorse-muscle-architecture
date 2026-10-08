@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sim dev check</title>
+<link rel="icon" href="data:,">
+<style>
+  :root { --bg: #f4f5f7; --fg: #1f2328; --muted: #656d76; --panel: #ffffffee; --line: #d0d7de; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg);
+    font: 13px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  #view { position: absolute; inset: 0; }
+  #panel { position: absolute; top: 12px; left: 12px; width: 300px; max-width: calc(100% - 24px);
+    background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px; box-sizing: border-box; }
+  #panel h1 { font-size: 14px; margin: 0 0 8px; }
+  label { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
+  label span { flex: 0 0 110px; color: var(--muted); }
+  input[type=range] { flex: 1; min-width: 0; }
+  pre { margin: 8px 0 0; font: 11px/1.35 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
+  button { font: inherit; padding: 3px 10px; margin-right: 6px; }
+  .err { color: #b42318; }
+</style>
+</head>
+<body>
+<div id="view"></div>
+<div id="panel">
+  <h1>Simulation core: dev check</h1>
+  <label><span>activation</span><input id="act" type="range" min="0" max="1" step="0.01" value="0"><b id="actv">0.00</b></label>
+  <label><span>plate opacity</span><input id="op" type="range" min="0" max="1" step="0.05" value="1"></label>
+  <label><span>show struts</span><input id="struts" type="checkbox" checked></label>
+  <label><span>show sites</span><input id="sites" type="checkbox"></label>
+  <label><span>highlight dextral</span><input id="hl" type="checkbox"></label>
+  <label><span>hanging + gravity</span><input id="hang" type="checkbox"></label>
+  <div><button id="reset">Reset</button><button id="pause">Pause</button></div>
+  <pre id="out">loading…</pre>
+</div>
+<script type="module">
+import { loadMujoco, loadAssets, Simulation } from "./js/sim.js";
+import { Viewer3D } from "./js/render3d.js";
+
+const out = document.getElementById("out");
+const fork = (name, color, plateA, plateB, ghost) => ({
+  name, group: name.split("_")[1], color, width: 0.001, damping: 0.01, stiffness: 0,
+  actuator: { type: "motor", max_force: 10 },
+  path: [`segment_5_plate_1_ghost_hm_tap_${ghost}`, `segment_6_plate_${plateA}_intermediate_hm_tap_9`,
+    `segment_7_plate_${plateA}_intermediate_hm_tap_5`, `segment_8_plate_${plateA}_intermediate_hm_tap_0`,
+    `segment_9_plate_${plateA}_end_hm_tap`],
+  branches: [{ from: 3, path: [`segment_9_plate_${plateB}_intermediate_hm_tap_0`, `segment_10_plate_${plateB}_end_hm_tap`] }],
+});
+const baseConfig = {
+  format: "seahorse-tendon-config", version: 1, name: "dev: HM fork x2",
+  tendons: [fork("hm_dextral", "#2563eb", 0, 0, "b"), fork("hm_sinistral", "#dc2626", 1, 1, "a")],
+};
+
+const t0 = performance.now();
+const mujoco = await loadMujoco();
+const tWasm = performance.now();
+const assets = await loadAssets("model/");
+const tAssets = performance.now();
+const viewer = new Viewer3D(document.getElementById("view"), {});
+let sim = null, paused = false, buildMs = 0, compileMs = 0, sceneMs = 0;
+
+async function rebuild() {
+  const hanging = document.getElementById("hang").checked;
+  const config = { ...baseConfig, params: hanging ? { orientation: "hanging", gravity: true } : {} };
+  const tb = performance.now();
+  const next = await Simulation.create(mujoco, assets, config);
+  buildMs = performance.now() - tb;
+  compileMs = next.compileMs;
+  const a = +document.getElementById("act").value;
+  next.setActivations({ hm_dextral: a, hm_sinistral: a });
+  if (sim) sim.dispose();   // free the old model's WASM memory
+  sim = next;
+  const tv = performance.now();
+  viewer.setSimulation(sim, { refitCamera: true });
+  viewer.render(); // includes first-time shader compilation / GPU upload
+  sceneMs = performance.now() - tv;
+}
+try {
+  await rebuild();
+} catch (e) {
+  out.innerHTML = `<span class="err">${e.message}</span>`;
+  throw e;
+}
+const tReady = performance.now();
+
+// --- controls ---------------------------------------------------------------
+const act = document.getElementById("act");
+act.addEventListener("input", () => {
+  document.getElementById("actv").textContent = (+act.value).toFixed(2);
+  sim.setActivations({ hm_dextral: +act.value, hm_sinistral: +act.value });
+});
+document.getElementById("op").addEventListener("input", (e) => viewer.setOptions({ plateOpacity: +e.target.value }));
+document.getElementById("struts").addEventListener("change", (e) => viewer.setOptions({ showStruts: e.target.checked }));
+document.getElementById("sites").addEventListener("change", (e) => viewer.setOptions({ showSites: e.target.checked }));
+document.getElementById("hl").addEventListener("change", (e) => viewer.setTendonHighlight(e.target.checked ? "hm_dextral" : null));
+document.getElementById("hang").addEventListener("change", () => rebuild());
+document.getElementById("reset").addEventListener("click", () => sim.reset());
+document.getElementById("pause").addEventListener("click", (e) => { paused = !paused; e.target.textContent = paused ? "Run" : "Pause"; });
+
+// --- loop -------------------------------------------------------------------
+let last = performance.now(), frames = 0, fps = 0, fpsT = last, physMs = 0, renderMs = 0;
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  const tp = performance.now();
+  if (!paused) sim.advance(dt);           // real-time
+  const tr = performance.now();
+  viewer.update();
+  const te = performance.now();
+  physMs = 0.9 * physMs + 0.1 * (tr - tp); renderMs = 0.9 * renderMs + 0.1 * (te - tr);
+  frames++;
+  if (now - fpsT > 500) {
+    fps = frames * 1000 / (now - fpsT); frames = 0; fpsT = now;
+    const m = sim.measure();
+    const s = viewer.stats;
+    out.textContent =
+      `wasm load ${(tWasm - t0).toFixed(0)} ms, assets ${(tAssets - tWasm).toFixed(0)} ms, first view ${(tReady - t0).toFixed(0)} ms\n` +
+      `build+compile ${buildMs.toFixed(0)} ms (compile ${compileMs.toFixed(0)} ms), scene ${sceneMs.toFixed(0)} ms\n` +
+      `fps ${fps.toFixed(1)}  physics ${physMs.toFixed(1)} ms/frame  render ${renderMs.toFixed(1)} ms/frame\n` +
+      `draw calls ${s.calls}, triangles ${(s.triangles / 1e6).toFixed(2)} M\n` +
+      `t = ${m.time.toFixed(2)} s\n` +
+      `tip ventral ${m.tip.ventral.toFixed(1)}°  lateral ${m.tip.lateral.toFixed(1)}°  twist ${m.tip.twist.toFixed(1)}°\n` +
+      m.tendons.map((t) => `${t.name}: F ${t.force.toFixed(2)} N, strain ${(100 * t.strain).toFixed(1)} %`).join("\n") +
+      `\npitch torque (N·mm): ${m.segments.map((x) => (1000 * x.torque.pitch).toFixed(0)).join(" ")}`;
+    window.__dev = { fps, physMs, renderMs, buildMs, compileMs, sceneMs, wasmMs: tWasm - t0, assetsMs: tAssets - tWasm,
+      firstViewMs: tReady - t0, calls: s.calls, triangles: s.triangles, tipVentral: m.tip.ventral, time: m.time };
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+window.__viewer = viewer;
+window.__sim = () => sim;
+</script>
+</body>
+</html>

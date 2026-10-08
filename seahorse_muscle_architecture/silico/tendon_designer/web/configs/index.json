@@ -1,0 +1,32 @@
+[
+  {
+    "file": "empty.json",
+    "name": "Empty",
+    "description": "No tendons. Start from scratch."
+  },
+  {
+    "file": "hm_span4_paper.json",
+    "name": "HM span 4 (paper)",
+    "description": "Two symmetric ventral HMs from segment 6 to the tip (segment 10), routed as in the paper."
+  },
+  {
+    "file": "hm_fork_5_9_10.json",
+    "name": "HM fork 5→9 + 10",
+    "description": "Ventral HMs from segment 5 to 9 that fork at segment 8 into a second end at the tip."
+  },
+  {
+    "file": "hm_span10_full.json",
+    "name": "HM span 10 (full length)",
+    "description": "Ventral HMs along the whole tail, from segment 0 to the tip."
+  },
+  {
+    "file": "mvm_chain.json",
+    "name": "MVM chain",
+    "description": "The paper's MVMs: one short muscle per joint and side, position-controlled (26 % shortening)."
+  },
+  {
+    "file": "hm_span4_mvm.json",
+    "name": "HM span 4 + MVMs",
+    "description": "The paper's HM pair (segment 6 to 10) together with the full MVM chain."
+  }
+]

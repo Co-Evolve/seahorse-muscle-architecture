@@ -38,8 +38,8 @@ class MJCFSeahorseMorphology(MJCFMorphology):
         self._build_tail()
         self._configure_gliding_joint_equality_constraints()
         self._build_hm_beams()
-        self._configure_hm_beam_ranges()
         self._configure_mvm_beams()
+        self._calculate_beam_ranges()
         self._configure_actuators()
         self._configure_sensors()
 
@@ -49,7 +49,6 @@ class MJCFSeahorseMorphology(MJCFMorphology):
         self.mjcf_model.compiler.angle = 'radian'
         self.mjcf_model.option.flag.contact = 'disable'
         self.mjcf_model.option.flag.gravity = 'disable'
-
 
     def _build_tail(
             self
@@ -131,12 +130,13 @@ class MJCFSeahorseMorphology(MJCFMorphology):
 
                     intermediate_points = iter(routing_specification.intermediate_points.value)
                     for segment_index in range(start_index + 1, stop_index):
+                        tap_index = next(intermediate_points)
+
                         if segment_index < 0:
                             continue
 
                         plate = self._segments[segment_index].plates[end_plate_index]
 
-                        tap_index = next(intermediate_points)  # routing_specification.intermediate_points.value[i]
                         taps += plate.intermediate_hm_taps[tap_index]
 
                     taps += end_plate.hm_tap_end
@@ -154,34 +154,23 @@ class MJCFSeahorseMorphology(MJCFMorphology):
 
                     self._hm_beams.append(beam)
 
-    def _configure_hm_beam_ranges(
+    def _calculate_beam_ranges(
             self
             ) -> None:
-        # Set beam ranges based on maximum curvature
+        self._hm_beams_straight_length = []
+        self._mvm_beams_straight_length = []
 
+        # Set beam ranges based on maximum curvature
         xml_str, assets = self.get_mjcf_str(), self.get_mjcf_assets()
         model = mujoco.MjModel.from_xml_string(xml=xml_str, assets=assets)
-        data = mujoco.MjData(model)
-        vertebrae_pitch_joints = [model.joint(joint_id) for joint_id in range(model.njnt) if
-                                  "vertebrae_joint_pitch" in model.joint(joint_id).name]
-        vertebrae_pitch_joints_qpos_adr = np.array(
-                [joint.qposadr[0] for joint in vertebrae_pitch_joints]
-                )
-        vertebrae_pitch_joints_range = np.array(
-                [joint.range[1] for joint in vertebrae_pitch_joints]
-                )
-        data.qpos[vertebrae_pitch_joints_qpos_adr] = vertebrae_pitch_joints_range
-        mujoco.mj_forward(model, data)
 
         for mjcf_beam in self._hm_beams:
             straight_length = model.tendon(mjcf_beam.full_identifier)._length0[0]
-            curved_length = data.tendon(mjcf_beam.full_identifier).length[0]
-            if "ventral" in mjcf_beam.full_identifier:
-                mjcf_beam.range = (curved_length, straight_length)
-                mjcf_beam.limited = True
-            if "dorsal" in mjcf_beam.full_identifier:
-                mjcf_beam.range = (straight_length, curved_length)
-                mjcf_beam.limited = True
+            self._hm_beams_straight_length.append(straight_length)
+
+        for mjcf_beam in self._mvm_beams:
+            straight_length = model.tendon(mjcf_beam.full_identifier)._length0[0]
+            self._mvm_beams_straight_length.append(straight_length)
 
     def _configure_mvm_beams(
             self
@@ -209,9 +198,6 @@ class MJCFSeahorseMorphology(MJCFMorphology):
                         name=f"mvm_beam_{side}_{segment.segment_index, next_segment.segment_index}",
                         width=mvm_beam_actuation_specification.beam_width.value,
                         rgba=colors.rgba_red,
-                        limited=True,
-                        range=[base_length * mvm_beam_actuation_specification.contraction_factor.value,
-                               base_length * mvm_beam_actuation_specification.relaxation_factor.value],
                         damping=mvm_beam_actuation_specification.damping.value
                         )
                 for tap in taps:
@@ -223,12 +209,14 @@ class MJCFSeahorseMorphology(MJCFMorphology):
             self
             ) -> None:
         self._beam_actuators = []
-        for beam in self._hm_beams:
-            if not beam.limited:
-                continue
+        for beam, straight_length in zip(self._hm_beams, self._hm_beams_straight_length):
+
             if self.beam_actuation_specification.hm_beam_actuation_specification.p_control.value:
                 kp = self.beam_actuation_specification.hm_beam_actuation_specification.p_control_kp.value
 
+                contraction_length = (
+                            straight_length -
+                            self.beam_actuation_specification.hm_beam_actuation_specification.strain.value)
                 self._beam_actuators.append(
                         self.mjcf_model.actuator.add(
                                 'position',
@@ -238,7 +226,7 @@ class MJCFSeahorseMorphology(MJCFMorphology):
                                 # only allow contraction forces
                                 forcerange=[-kp, 0],
                                 ctrllimited=True,
-                                ctrlrange=beam.range,
+                                ctrlrange=[0, straight_length],
                                 kp=kp
                                 )
                         )
@@ -246,25 +234,25 @@ class MJCFSeahorseMorphology(MJCFMorphology):
                 gear = self.beam_actuation_specification.hm_beam_actuation_specification.f_control_gear.value
                 self._beam_actuators.append(
                         self.mjcf_model.actuator.add(
-                                'motor',
-                                tendon=beam,
-                                name=beam.name,
-                                forcelimited=True,
-                                # only allow contraction forces
-                                forcerange=[-gear, 0],
-                                ctrllimited=True,
-                                ctrlrange=[-1, 0],
-                                gear=[gear]
+                                'motor', tendon=beam, name=beam.name, forcelimited=True, # only allow contraction forces
+                                forcerange=[-gear, 0], ctrllimited=True, ctrlrange=[-1, 0], gear=[gear]
                                 )
                         )
-        for beam in self._mvm_beams:
-            if not beam.limited:
-                continue
+        for beam, straight_length in zip(self._mvm_beams, self._mvm_beams_straight_length):
             kp = self.beam_actuation_specification.mvm_beam_actuation_specification.p_control_kp.value
+            contraction_length = (
+                    straight_length * self.beam_actuation_specification.mvm_beam_actuation_specification.strain.value)
             self._beam_actuators.append(
                     self.mjcf_model.actuator.add(
-                            'position', tendon=beam, name=beam.name, forcelimited=True,  # only allow contraction forces
-                            forcerange=[-kp, 0], ctrllimited=True, ctrlrange=beam.range, kp=kp
+                            'position',
+                            tendon=beam,
+                            name=beam.name,
+                            forcelimited=True,
+                            # only allow contraction forces
+                            forcerange=[-kp, 0],
+                            ctrllimited=True,
+                            ctrlrange=[contraction_length, straight_length],
+                            kp=kp
                             )
                     )
 

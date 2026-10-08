@@ -173,7 +173,8 @@ class SeahorseHMMTendonActuationSpecification(Specification):
             beam_width: float,
             segment_span: int,
             damping: float,
-            routing_specifications: List[HMMTendonRoutingSpecification]
+            routing_specifications: List[HMMTendonRoutingSpecification],
+            strain: float
             ) -> None:
         super().__init__()
         self.p_control = FixedParameter(p_control)
@@ -183,6 +184,7 @@ class SeahorseHMMTendonActuationSpecification(Specification):
         self.segment_span = FixedParameter(segment_span)
         self.damping = FixedParameter(damping)
         self.routing_specifications = routing_specifications
+        self.strain = FixedParameter(strain)
 
 
 class SeahorseMVMTendonActuationSpecification(Specification):
@@ -190,20 +192,17 @@ class SeahorseMVMTendonActuationSpecification(Specification):
             self,
             *,
             enabled: bool,
-            contraction_factor: float,
-            relaxation_factor: float,
             p_control_kp: float,
             beam_width: float,
-            damping: float
+            damping: float,
+            strain: float
             ) -> None:
         super().__init__()
         self.enabled = FixedParameter(enabled)
-        self.contraction_factor = FixedParameter(contraction_factor)
-        self.relaxation_factor = FixedParameter(relaxation_factor)
         self.p_control_kp = FixedParameter(p_control_kp)
         self.beam_width = FixedParameter(beam_width)
         self.damping = FixedParameter(damping)
-
+        self.strain = FixedParameter(strain)
 
 class SeahorseTendonActuationSpecification(Specification):
     def __init__(

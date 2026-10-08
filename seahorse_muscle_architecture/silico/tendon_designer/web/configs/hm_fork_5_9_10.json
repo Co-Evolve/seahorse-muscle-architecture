@@ -1,0 +1,48 @@
+{
+  "format": "seahorse-tendon-config",
+  "version": 1,
+  "name": "HM fork 5→9 + 10",
+  "description": "Ventral HM pair from segment 5 to segment 9 (holes 9, 5, 0 in segments 6-8). At segment 8 each HM splits: the branch passes hole 0 of segment 9 and ends at the corner of segment 10. One actuator pulls both ends.",
+  "params": {},
+  "free_points": [],
+  "tendons": [
+    {
+      "name": "hm_dextral",
+      "group": "dextral",
+      "color": "#2a78d6",
+      "width": 0.001,
+      "damping": 0.01,
+      "stiffness": 0,
+      "actuator": {
+        "type": "motor",
+        "max_force": 10
+      },
+      "path": ["segment_5_plate_1_ghost_hm_tap_b", "segment_6_plate_0_intermediate_hm_tap_9", "segment_7_plate_0_intermediate_hm_tap_5", "segment_8_plate_0_intermediate_hm_tap_0", "segment_9_plate_0_end_hm_tap"],
+      "branches": [
+        {
+          "from": 3,
+          "path": ["segment_9_plate_0_intermediate_hm_tap_0", "segment_10_plate_0_end_hm_tap"]
+        }
+      ]
+    },
+    {
+      "name": "hm_sinistral",
+      "group": "sinistral",
+      "color": "#eb6834",
+      "width": 0.001,
+      "damping": 0.01,
+      "stiffness": 0,
+      "actuator": {
+        "type": "motor",
+        "max_force": 10
+      },
+      "path": ["segment_5_plate_1_ghost_hm_tap_a", "segment_6_plate_1_intermediate_hm_tap_9", "segment_7_plate_1_intermediate_hm_tap_5", "segment_8_plate_1_intermediate_hm_tap_0", "segment_9_plate_1_end_hm_tap"],
+      "branches": [
+        {
+          "from": 3,
+          "path": ["segment_9_plate_1_intermediate_hm_tap_0", "segment_10_plate_1_end_hm_tap"]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,358 @@
+{
+  "format": "seahorse-tendon-config",
+  "version": 1,
+  "name": "HM span 4 + MVMs",
+  "description": "Ventral HM pair from segment 6 to 10 (paper routing) plus one MVM per joint and side.",
+  "params": {},
+  "free_points": [],
+  "tendons": [
+    {
+      "name": "hm_dextral",
+      "group": "dextral",
+      "color": "#2a78d6",
+      "width": 0.001,
+      "damping": 0.01,
+      "stiffness": 0,
+      "actuator": {
+        "type": "motor",
+        "max_force": 10
+      },
+      "path": ["segment_6_plate_1_ghost_hm_tap_b", "segment_7_plate_0_intermediate_hm_tap_9", "segment_8_plate_0_intermediate_hm_tap_5", "segment_9_plate_0_intermediate_hm_tap_0", "segment_10_plate_0_end_hm_tap"],
+      "branches": []
+    },
+    {
+      "name": "hm_sinistral",
+      "group": "sinistral",
+      "color": "#eb6834",
+      "width": 0.001,
+      "damping": 0.01,
+      "stiffness": 0,
+      "actuator": {
+        "type": "motor",
+        "max_force": 10
+      },
+      "path": ["segment_6_plate_1_ghost_hm_tap_a", "segment_7_plate_1_intermediate_hm_tap_9", "segment_8_plate_1_intermediate_hm_tap_5", "segment_9_plate_1_intermediate_hm_tap_0", "segment_10_plate_1_end_hm_tap"],
+      "branches": []
+    },
+    {
+      "name": "mvm_dextral_0_1",
+      "group": "mvm_dextral",
+      "color": "#4a3aa7",
+      "width": 0.001,
+      "damping": 1,
+      "stiffness": 0,
+      "actuator": {
+        "type": "position",
+        "kp": 1000,
+        "max_force": 1000,
+        "max_strain": 0.26
+      },
+      "path": ["segment_0_plate_1_mvm_tap_dextral", "segment_1_plate_1_mvm_tap_dextral"],
+      "branches": []
+    },
+    {
+      "name": "mvm_dextral_1_2",
+      "group": "mvm_dextral",
+      "color": "#4a3aa7",
+      "width": 0.001,
+      "damping": 1,
+      "stiffness": 0,
+      "actuator": {
+        "type": "position",
+        "kp": 1000,
+        "max_force": 1000,
+        "max_strain": 0.26
+      },
+      "path": ["segment_1_plate_1_mvm_tap_dextral", "segment_2_plate_1_mvm_tap_dextral"],
+      "branches": []
+    },
+    {
+      "name": "mvm_dextral_2_3",
+      "group": "mvm_dextral",
+      "color": "#4a3aa7",
+      "width": 0.001,
+      "damping": 1,
+      "stiffness": 0,
+      "actuator": {
+        "type": "position",
+        "kp": 1000,
+        "max_force": 1000,
+        "max_strain": 0.26
+      },
+      "path": ["segment_2_plate_1_mvm_tap_dextral", "segment_3_plate_1_mvm_tap_dextral"],
+      "branches": []
+    },
+    {
+      "name": "mvm_dextral_3_4",
+      "group": "mvm_dextral",
+      "color": "#4a3aa7",
+      "width": 0.001,
+      "damping": 1,
+      "stiffness": 0,
+      "actuator": {
+        "type": "position",
+        "kp": 1000,
+        "max_force": 1000,
+        "max_strain": 0.26
+      },
+      "path": ["segment_3_plate_1_mvm_tap_dextral", "segment_4_plate_1_mvm_tap_dextral"],
+      "branches": []
+    },
+    {
+      "name": "mvm_dextral_4_5",
+      "group": "mvm_dextral",
+      "color": "#4a3aa7",
+      "width": 0.001,
+      "damping": 1,
+      "stiffness": 0,
+      "actuator": {
+        "type": "position",
+        "kp": 1000,
+        "max_force": 1000,
+        "max_strain": 0.26
+      },
+      "path": ["segment_4_plate_1_mvm_tap_dextral", "segment_5_plate_1_mvm_tap_dextral"],
+      "branches": []
+    },
+    {
+      "name": "mvm_dextral_5_6",
+      "group": "mvm_dextral",
+      "color": "#4a3aa7",
+      "width": 0.001,
+      "damping": 1,
+      "stiffness": 0,
+      "actuator": {
+        "type": "position",
+        "kp": 1000,
+        "max_force": 1000,
+        "max_strain": 0.26
+      },
+      "path": ["segment_5_plate_1_mvm_tap_dextral", "segment_6_plate_1_mvm_tap_dextral"],
+      "branches": []
+    },
+    {
+      "name": "mvm_dextral_6_7",
+      "group": "mvm_dextral",
+      "color": "#4a3aa7",
+      "width": 0.001,
+      "damping": 1,
+      "stiffness": 0,
+      "actuator": {
+        "type": "position",
+        "kp": 1000,
+        "max_force": 1000,
+        "max_strain": 0.26
+      },
+      "path": ["segment_6_plate_1_mvm_tap_dextral", "segment_7_plate_1_mvm_tap_dextral"],
+      "branches": []
+    },
+    {
+      "name": "mvm_dextral_7_8",
+      "group": "mvm_dextral",
+      "color": "#4a3aa7",
+      "width": 0.001,
+      "damping": 1,
+      "stiffness": 0,
+      "actuator": {
+        "type": "position",
+        "kp": 1000,
+        "max_force": 1000,
+        "max_strain": 0.26
+      },
+      "path": ["segment_7_plate_1_mvm_tap_dextral", "segment_8_plate_1_mvm_tap_dextral"],
+      "branches": []
+    },
+    {
+      "name": "mvm_dextral_8_9",
+      "group": "mvm_dextral",
+      "color": "#4a3aa7",
+      "width": 0.001,
+      "damping": 1,
+      "stiffness": 0,
+      "actuator": {
+        "type": "position",
+        "kp": 1000,
+        "max_force": 1000,
+        "max_strain": 0.26
+      },
+      "path": ["segment_8_plate_1_mvm_tap_dextral", "segment_9_plate_1_mvm_tap_dextral"],
+      "branches": []
+    },
+    {
+      "name": "mvm_dextral_9_10",
+      "group": "mvm_dextral",
+      "color": "#4a3aa7",
+      "width": 0.001,
+      "damping": 1,
+      "stiffness": 0,
+      "actuator": {
+        "type": "position",
+        "kp": 1000,
+        "max_force": 1000,
+        "max_strain": 0.26
+      },
+      "path": ["segment_9_plate_1_mvm_tap_dextral", "segment_10_plate_1_mvm_tap_dextral"],
+      "branches": []
+    },
+    {
+      "name": "mvm_sinistral_0_1",
+      "group": "mvm_sinistral",
+      "color": "#e87ba4",
+      "width": 0.001,
+      "damping": 1,
+      "stiffness": 0,
+      "actuator": {
+        "type": "position",
+        "kp": 1000,
+        "max_force": 1000,
+        "max_strain": 0.26
+      },
+      "path": ["segment_0_plate_1_mvm_tap_sinistral", "segment_1_plate_1_mvm_tap_sinistral"],
+      "branches": []
+    },
+    {
+      "name": "mvm_sinistral_1_2",
+      "group": "mvm_sinistral",
+      "color": "#e87ba4",
+      "width": 0.001,
+      "damping": 1,
+      "stiffness": 0,
+      "actuator": {
+        "type": "position",
+        "kp": 1000,
+        "max_force": 1000,
+        "max_strain": 0.26
+      },
+      "path": ["segment_1_plate_1_mvm_tap_sinistral", "segment_2_plate_1_mvm_tap_sinistral"],
+      "branches": []
+    },
+    {
+      "name": "mvm_sinistral_2_3",
+      "group": "mvm_sinistral",
+      "color": "#e87ba4",
+      "width": 0.001,
+      "damping": 1,
+      "stiffness": 0,
+      "actuator": {
+        "type": "position",
+        "kp": 1000,
+        "max_force": 1000,
+        "max_strain": 0.26
+      },
+      "path": ["segment_2_plate_1_mvm_tap_sinistral", "segment_3_plate_1_mvm_tap_sinistral"],
+      "branches": []
+    },
+    {
+      "name": "mvm_sinistral_3_4",
+      "group": "mvm_sinistral",
+      "color": "#e87ba4",
+      "width": 0.001,
+      "damping": 1,
+      "stiffness": 0,
+      "actuator": {
+        "type": "position",
+        "kp": 1000,
+        "max_force": 1000,
+        "max_strain": 0.26
+      },
+      "path": ["segment_3_plate_1_mvm_tap_sinistral", "segment_4_plate_1_mvm_tap_sinistral"],
+      "branches": []
+    },
+    {
+      "name": "mvm_sinistral_4_5",
+      "group": "mvm_sinistral",
+      "color": "#e87ba4",
+      "width": 0.001,
+      "damping": 1,
+      "stiffness": 0,
+      "actuator": {
+        "type": "position",
+        "kp": 1000,
+        "max_force": 1000,
+        "max_strain": 0.26
+      },
+      "path": ["segment_4_plate_1_mvm_tap_sinistral", "segment_5_plate_1_mvm_tap_sinistral"],
+      "branches": []
+    },
+    {
+      "name": "mvm_sinistral_5_6",
+      "group": "mvm_sinistral",
+      "color": "#e87ba4",
+      "width": 0.001,
+      "damping": 1,
+      "stiffness": 0,
+      "actuator": {
+        "type": "position",
+        "kp": 1000,
+        "max_force": 1000,
+        "max_strain": 0.26
+      },
+      "path": ["segment_5_plate_1_mvm_tap_sinistral", "segment_6_plate_1_mvm_tap_sinistral"],
+      "branches": []
+    },
+    {
+      "name": "mvm_sinistral_6_7",
+      "group": "mvm_sinistral",
+      "color": "#e87ba4",
+      "width": 0.001,
+      "damping": 1,
+      "stiffness": 0,
+      "actuator": {
+        "type": "position",
+        "kp": 1000,
+        "max_force": 1000,
+        "max_strain": 0.26
+      },
+      "path": ["segment_6_plate_1_mvm_tap_sinistral", "segment_7_plate_1_mvm_tap_sinistral"],
+      "branches": []
+    },
+    {
+      "name": "mvm_sinistral_7_8",
+      "group": "mvm_sinistral",
+      "color": "#e87ba4",
+      "width": 0.001,
+      "damping": 1,
+      "stiffness": 0,
+      "actuator": {
+        "type": "position",
+        "kp": 1000,
+        "max_force": 1000,
+        "max_strain": 0.26
+      },
+      "path": ["segment_7_plate_1_mvm_tap_sinistral", "segment_8_plate_1_mvm_tap_sinistral"],
+      "branches": []
+    },
+    {
+      "name": "mvm_sinistral_8_9",
+      "group": "mvm_sinistral",
+      "color": "#e87ba4",
+      "width": 0.001,
+      "damping": 1,
+      "stiffness": 0,
+      "actuator": {
+        "type": "position",
+        "kp": 1000,
+        "max_force": 1000,
+        "max_strain": 0.26
+      },
+      "path": ["segment_8_plate_1_mvm_tap_sinistral", "segment_9_plate_1_mvm_tap_sinistral"],
+      "branches": []
+    },
+    {
+      "name": "mvm_sinistral_9_10",
+      "group": "mvm_sinistral",
+      "color": "#e87ba4",
+      "width": 0.001,
+      "damping": 1,
+      "stiffness": 0,
+      "actuator": {
+        "type": "position",
+        "kp": 1000,
+        "max_force": 1000,
+        "max_strain": 0.26
+      },
+      "path": ["segment_9_plate_1_mvm_tap_sinistral", "segment_10_plate_1_mvm_tap_sinistral"],
+      "branches": []
+    }
+  ]
+}

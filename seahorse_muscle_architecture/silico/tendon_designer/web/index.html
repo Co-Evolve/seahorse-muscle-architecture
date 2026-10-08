@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tendon Designer</title>
+  <meta name="description" content="Design tendon configurations for a seahorse-tail robot, simulate them with MuJoCo and compare how they bend.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M9 4c8 0 14 5 14 12 0 5-4 9-8 9-3.5 0-6-2.4-6-5.5S11.4 14 14 14c2 0 3.5 1.4 3.5 3.2' fill='none' stroke='%230b7285' stroke-width='3.2' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/slice_editor.css">
+  <script>
+    // apply the saved theme before first paint (no flash)
+    try { const t = JSON.parse(localStorage.getItem("tendon-designer.theme")); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <header class="topbar" id="topbar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M9 4c8 0 14 5 14 12 0 5-4 9-8 9-3.5 0-6-2.4-6-5.5S11.4 14 14 14c2 0 3.5 1.4 3.5 3.2"/></svg>
+      <span class="brand-name">Tendon Designer</span>
+    </div>
+    <div class="config-name-wrap">
+      <input id="config-name" class="config-name" spellcheck="false" aria-label="Configuration name" value="">
+      <span id="save-state" class="save-state" aria-live="polite"></span>
+    </div>
+    <div class="toolbar" role="toolbar" aria-label="File">
+      <button class="btn btn-ghost" id="btn-new" data-tip="Start a new, empty configuration (you can undo this)">New</button>
+      <button class="btn btn-ghost" id="btn-open" data-tip="Open a configuration file (.json) or one from your library">Open</button>
+      <button class="btn btn-ghost" id="btn-save" data-tip="Download the configuration as a file, or keep it in your library">Save</button>
+      <button class="btn btn-ghost" id="btn-presets" data-tip="Ready-made configurations to start from">Presets</button>
+      <span class="toolbar-sep" aria-hidden="true"></span>
+      <button class="icon-btn" id="btn-undo" aria-label="Undo" data-tip="Undo (Ctrl+Z)"></button>
+      <button class="icon-btn" id="btn-redo" aria-label="Redo" data-tip="Redo (Ctrl+Shift+Z)"></button>
+    </div>
+    <div class="view-switch" id="view-switch"></div>
+    <div class="toolbar toolbar-right">
+      <span id="mode-badge" class="badge" hidden></span>
+      <button class="btn btn-ghost" id="btn-export" data-tip="Download the MuJoCo model (MJCF XML) of the current design">Export MJCF</button>
+      <button class="icon-btn" id="btn-theme" aria-label="Colour theme"></button>
+      <button class="btn btn-secondary" id="btn-help" data-tip="How this works (?)">Help</button>
+    </div>
+  </header>
+
+  <main id="view-design" class="view view-design">
+    <aside class="col col-left" aria-label="Design">
+      <div class="left-tabs" id="left-tabs"></div>
+      <div class="left-pane" id="pane-tendons">
+        <section class="card card-tendons">
+          <div id="tendon-list"></div>
+        </section>
+        <section class="card card-slice">
+          <header class="card-head" id="slice-head">
+            <h2 class="card-title">Slice view</h2>
+            <span class="card-sub" id="slice-sub">One segment, seen from the base</span>
+          </header>
+          <div class="segment-picker" id="segment-picker" role="toolbar" aria-label="Segment"></div>
+          <div id="slice-editor" class="slice-editor-host"></div>
+        </section>
+        <section class="card card-props" id="props-card">
+          <header class="card-head"><h2 class="card-title">Tendon properties</h2><span class="card-sub" id="props-sub"></span></header>
+          <div id="tendon-detail" class="tendon-detail-wrap hidden"></div>
+        </section>
+      </div>
+      <div class="left-pane" id="pane-body" hidden>
+        <section class="card"><div id="params-panel"></div></section>
+      </div>
+    </aside>
+
+    <section class="col col-center" aria-label="Simulation view">
+      <div class="viewport card" id="viewport">
+        <div id="viewer3d" class="viewer-host"></div>
+        <div class="viewport-overlay">
+          <div id="banners" class="banners"></div>
+          <div class="viewport-status" id="viewport-status"></div>
+        </div>
+        <div id="loading" class="loading">
+          <div class="loading-inner">
+            <div class="spinner" aria-hidden="true"></div>
+            <div id="loading-text">Loading the physics engine…</div>
+          </div>
+        </div>
+      </div>
+      <div class="dock card" id="analysis-dock" aria-label="Live measurements"></div>
+    </section>
+
+    <aside class="col col-right" aria-label="Simulation controls and measurements">
+      <section class="card" id="sim-controls"></section>
+      <section class="card" id="activation-panel"></section>
+      <section class="card" id="readout"></section>
+    </aside>
+  </main>
+
+  <main id="view-experiments" class="view view-experiments" hidden></main>
+</body>
+</html>

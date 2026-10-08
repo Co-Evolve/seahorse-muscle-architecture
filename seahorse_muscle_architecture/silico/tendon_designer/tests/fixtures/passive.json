@@ -1,0 +1,41 @@
+{
+  "format": "seahorse-tendon-config",
+  "version": 1,
+  "name": "test passive tendon",
+  "description": "",
+  "params": {},
+  "free_points": [],
+  "tendons": [
+    {
+      "name": "driver",
+      "group": "ventral",
+      "color": "#2a78d6",
+      "width": 0.001,
+      "damping": 0.01,
+      "stiffness": 0,
+      "actuator": {
+        "type": "motor",
+        "max_force": 10
+      },
+      "path": [
+        "segment_1_plate_0_end_hm_tap",
+        "segment_6_plate_0_end_hm_tap"
+      ]
+    },
+    {
+      "name": "passive_dorsal",
+      "group": "dorsal",
+      "color": "#4a3aa7",
+      "width": 0.001,
+      "damping": 0.05,
+      "stiffness": 200,
+      "actuator": {
+        "type": "none"
+      },
+      "path": [
+        "segment_1_plate_3_end_hm_tap",
+        "segment_6_plate_3_end_hm_tap"
+      ]
+    }
+  ]
+}

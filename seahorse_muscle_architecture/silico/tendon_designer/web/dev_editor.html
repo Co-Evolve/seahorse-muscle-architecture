@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Slice editor test bench</title>
+<link rel="stylesheet" href="css/slice_editor.css">
+<style>
+  /* Stand-in for the app's tokens (app.css defines the real ones). */
+  :root {
+    --bg: #eef1f5; --surface: #ffffff; --surface-2: #f3f5f8; --border: #e1e5eb;
+    --text: #1b2230; --text-muted: #667085; --accent: #2563eb; --accent-contrast: #fff;
+    --danger: #d92d20; --radius: 10px;
+    --shadow: 0 1px 2px rgba(16,24,40,.06), 0 4px 14px rgba(16,24,40,.07);
+    --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1218; --surface: #171b23; --surface-2: #1f242e; --border: #2b313d;
+      --text: #e6e9ef; --text-muted: #98a1b2; --accent: #5b8def; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1218; --surface: #171b23; --surface-2: #1f242e; --border: #2b313d;
+    --text: #e6e9ef; --text-muted: #98a1b2; --accent: #5b8def; color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-sans); font-size: 13px; }
+  main { display: grid; grid-template-columns: minmax(0, var(--panel, 480px)) minmax(0, 1fr); gap: 16px; padding: 16px; align-items: start; }
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px; box-shadow: var(--shadow); }
+  .side { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+  h1 { font-size: 15px; margin: 0 0 8px; }
+  .row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  select, button.b { font: inherit; height: 30px; padding: 0 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; }
+  .tendons { display: flex; flex-direction: column; gap: 2px; margin-top: 8px; max-height: 260px; overflow: auto; }
+  .tendons button { display: flex; align-items: center; gap: 8px; text-align: left; padding: 5px 8px; border: 0; border-radius: 7px; background: transparent; color: var(--text); font: inherit; cursor: pointer; }
+  .tendons button.on { background: var(--surface-2); font-weight: 650; }
+  .tendons i { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+  .tendons small { color: var(--text-muted); font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  pre { margin: 0; font-family: var(--font-mono); font-size: 11px; max-height: 420px; overflow: auto; background: var(--surface-2); padding: 10px; border-radius: 8px; }
+  ul.issues { margin: 0; padding-left: 18px; }
+  ul.issues li.error { color: var(--danger); }
+  ul.issues li.warning { color: #b54708; }
+  @media (max-width: 860px) { main { grid-template-columns: minmax(0, 1fr); padding: 8px; } }
+</style>
+</head>
+<body>
+<main>
+  <section class="panel" id="editor-panel"></section>
+  <section class="side">
+    <div class="panel">
+      <h1>Slice editor test bench</h1>
+      <div class="row">
+        <select id="preset" aria-label="Preset"></select>
+        <button class="b" id="add">Add tendon</button>
+        <button class="b" id="mirror">Mirror active</button>
+        <button class="b" id="undo">Undo</button>
+        <button class="b" id="theme">Theme</button>
+      </div>
+      <div class="tendons" id="tendons"></div>
+    </div>
+    <div class="panel"><h1>Checks</h1><ul class="issues" id="issues"></ul></div>
+    <div class="panel"><h1>Config JSON</h1><pre id="json"></pre></div>
+  </section>
+</main>
+<script type="module">
+  import { SliceEditor } from "./js/slice_editor.js";
+  import { normaliseConfig, newConfig, newTendon, addTendon, addMirroredTendon, validateConfig, describeTendon } from "./js/config.js";
+
+  const params = new URLSearchParams(location.search);
+  if (params.get("w")) document.documentElement.style.setProperty("--panel", params.get("w") + "px");
+  if (params.get("theme")) document.documentElement.dataset.theme = params.get("theme");
+
+  const catalog = await (await fetch("model/catalog.json")).json();
+  const index = await (await fetch("configs/index.json")).json();
+  let config = newConfig();
+  let active = null;
+  const history = [];
+
+  const editor = new SliceEditor(document.getElementById("editor-panel"), catalog, {
+    onChange: (c) => { history.push(config); config = c; editor.setConfig(config); refresh(); },
+    onSelectTendon: (name) => { active = name; editor.setActiveTendon(name); refresh(); },
+  });
+  window.editor = editor;
+  window.getConfig = () => config;
+
+  const sel = document.getElementById("preset");
+  sel.innerHTML = index.map((p) => `<option value="${p.file}">${p.name}</option>`).join("");
+  async function loadPreset(file) {
+    config = normaliseConfig(await (await fetch("configs/" + file)).json());
+    history.length = 0;
+    active = config.tendons[0]?.name || null;
+    editor.setConfig(config);
+    editor.setActiveTendon(active);
+    refresh();
+  }
+  sel.onchange = () => loadPreset(sel.value);
+  document.getElementById("add").onclick = () => {
+    const t = newTendon(config, { name: "tendon_1" });
+    history.push(config);
+    config = addTendon(config, t);
+    active = config.tendons[config.tendons.length - 1].name;
+    editor.setConfig(config); editor.setActiveTendon(active); refresh();
+  };
+  document.getElementById("mirror").onclick = () => {
+    if (!active) return;
+    history.push(config);
+    const r = addMirroredTendon(config, active, catalog);
+    config = r.config; active = r.name;
+    editor.setConfig(config); editor.setActiveTendon(active); refresh();
+  };
+  document.getElementById("undo").onclick = () => {
+    if (!history.length) return;
+    config = history.pop(); editor.setConfig(config); refresh();
+  };
+  document.getElementById("theme").onclick = () => {
+    const r = document.documentElement;
+    r.dataset.theme = r.dataset.theme === "dark" ? "light" : "dark";
+  };
+
+  function refresh() {
+    const list = document.getElementById("tendons");
+    list.innerHTML = "";
+    for (const t of config.tendons) {
+      const b = document.createElement("button");
+      b.className = t.name === active ? "on" : "";
+      b.innerHTML = `<i style="background:${t.color}"></i><span>${t.name}</span><small>${describeTendon(t, catalog, config)}</small>`;
+      b.onclick = () => { active = t.name; editor.setActiveTendon(active); refresh(); };
+      list.append(b);
+    }
+    const issues = validateConfig(config, catalog);
+    document.getElementById("issues").innerHTML = issues.length
+      ? issues.map((i) => `<li class="${i.level}">${i.message}</li>`).join("")
+      : "<li>No problems found.</li>";
+    document.getElementById("json").textContent = JSON.stringify(config, null, 2);
+  }
+
+  const start = params.get("preset") || "hm_span4_paper.json";
+  sel.value = start;
+  await loadPreset(start);
+  if (params.get("seg")) editor.setSegment(Number(params.get("seg")));
+  window.ready = true;
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+{
+  "format": "seahorse-tendon-config",
+  "version": 1,
+  "name": "test free point",
+  "description": "",
+  "params": {},
+  "free_points": [
+    {
+      "id": "free_1",
+      "segment": 5,
+      "plate": 0,
+      "xy": [
+        0.031,
+        -0.02
+      ]
+    },
+    {
+      "id": "free_2",
+      "segment": 9,
+      "plate": 1,
+      "xy": [
+        0.03,
+        0.02
+      ]
+    }
+  ],
+  "tendons": [
+    {
+      "name": "free_route",
+      "group": "ventral",
+      "color": "#1baf7a",
+      "width": 0.001,
+      "damping": 0.01,
+      "stiffness": 0,
+      "actuator": {
+        "type": "motor",
+        "max_force": 10
+      },
+      "path": [
+        "segment_2_plate_0_end_hm_tap",
+        "free_1",
+        "segment_8_plate_0_intermediate_hm_tap_1",
+        "free_2"
+      ]
+    }
+  ]
+}

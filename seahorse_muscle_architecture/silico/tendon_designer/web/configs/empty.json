@@ -1,0 +1,9 @@
+{
+  "format": "seahorse-tendon-config",
+  "version": 1,
+  "name": "Empty",
+  "description": "No tendons. Start from scratch.",
+  "params": {},
+  "free_points": [],
+  "tendons": []
+}
