@@ -1,0 +1,31 @@
+TENDON DESIGNER - START HERE
+============================
+
+1. Extract the zip file first.
+   Right-click the zip file and choose "Extract All...". Do not run the app
+   from inside the zip.
+
+2. Open the extracted folder and double-click "Start Tendon Designer.bat".
+   A black window opens and then your web browser opens the app.
+   - If Windows shows "Windows protected your PC", click "More info" and then
+     "Run anyway". This file only starts a small local web server.
+   - Keep the black window open while you work. Close it to stop the app.
+   - If the browser does not open, go to http://localhost:8765 yourself
+     (the black window shows the exact address).
+
+3. Use Google Chrome or Microsoft Edge (recent versions).
+
+Your work
+---------
+- The app keeps your current design in the browser, but browsers can clear
+  this. Use "Save" in the app to download your design as a .json file, and
+  keep these files in a safe folder.
+- Send the .json files (and any CSV exports) to your supervisor.
+- To continue later: start the app again and use "Open" to load a .json file.
+
+Help
+----
+- Click "Help" in the top-right corner of the app.
+- The full guide is "app\README.md" (open it with Notepad).
+
+Version: {VERSION}

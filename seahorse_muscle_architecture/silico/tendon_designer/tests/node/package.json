@@ -1,0 +1,12 @@
+{
+  "name": "tendon-designer-node-tests",
+  "private": true,
+  "type": "module",
+  "description": "Node tests for web/js/model_builder.js and web/js/sim.js (test-only deps; the web app itself has no build step).",
+  "scripts": {
+    "test": "node --test --test-concurrency=1 model_builder.test.mjs sim.test.mjs"
+  },
+  "devDependencies": {
+    "@xmldom/xmldom": "0.9.12"
+  }
+}

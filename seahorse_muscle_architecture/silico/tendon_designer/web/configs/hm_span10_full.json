@@ -1,0 +1,38 @@
+{
+  "format": "seahorse-tendon-config",
+  "version": 1,
+  "name": "HM span 10 (full length)",
+  "description": "Two symmetric ventral HMs from segment 0 to segment 10, through one hole in every segment in between (select_symmetric_points(9)).",
+  "params": {},
+  "free_points": [],
+  "tendons": [
+    {
+      "name": "hm_dextral",
+      "group": "dextral",
+      "color": "#2a78d6",
+      "width": 0.001,
+      "damping": 0.01,
+      "stiffness": 0,
+      "actuator": {
+        "type": "motor",
+        "max_force": 10
+      },
+      "path": ["segment_0_plate_1_ghost_hm_tap_b", "segment_1_plate_0_intermediate_hm_tap_9", "segment_2_plate_0_intermediate_hm_tap_9", "segment_3_plate_0_intermediate_hm_tap_8", "segment_4_plate_0_intermediate_hm_tap_6", "segment_5_plate_0_intermediate_hm_tap_5", "segment_6_plate_0_intermediate_hm_tap_4", "segment_7_plate_0_intermediate_hm_tap_2", "segment_8_plate_0_intermediate_hm_tap_1", "segment_9_plate_0_intermediate_hm_tap_0", "segment_10_plate_0_end_hm_tap"],
+      "branches": []
+    },
+    {
+      "name": "hm_sinistral",
+      "group": "sinistral",
+      "color": "#eb6834",
+      "width": 0.001,
+      "damping": 0.01,
+      "stiffness": 0,
+      "actuator": {
+        "type": "motor",
+        "max_force": 10
+      },
+      "path": ["segment_0_plate_1_ghost_hm_tap_a", "segment_1_plate_1_intermediate_hm_tap_9", "segment_2_plate_1_intermediate_hm_tap_9", "segment_3_plate_1_intermediate_hm_tap_8", "segment_4_plate_1_intermediate_hm_tap_6", "segment_5_plate_1_intermediate_hm_tap_5", "segment_6_plate_1_intermediate_hm_tap_4", "segment_7_plate_1_intermediate_hm_tap_2", "segment_8_plate_1_intermediate_hm_tap_1", "segment_9_plate_1_intermediate_hm_tap_0", "segment_10_plate_1_end_hm_tap"],
+      "branches": []
+    }
+  ]
+}

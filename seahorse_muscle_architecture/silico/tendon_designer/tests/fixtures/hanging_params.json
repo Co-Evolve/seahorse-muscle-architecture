@@ -1,0 +1,46 @@
+{
+  "format": "seahorse-tendon-config",
+  "version": 1,
+  "name": "test hanging + params",
+  "description": "",
+  "params": {
+    "vertebra": {
+      "pitch_stiffness": 0.002,
+      "pitch_damping": 0.0002,
+      "pitch_range_deg": 20,
+      "roll_stiffness": 0.003,
+      "roll_damping": 0.0003,
+      "roll_range_deg": 10,
+      "yaw_damping": 0.2,
+      "yaw_range_deg": 3
+    },
+    "stiffness_taper": 3.0,
+    "plate_glide": {
+      "stiffness": 2.0,
+      "damping": 0.5
+    },
+    "strut": {
+      "stiffness": 5.0,
+      "damping": 2.0
+    },
+    "orientation": "hanging",
+    "gravity": true,
+    "timestep": 0.001
+  },
+  "free_points": [],
+  "tendons": [
+    {
+      "name": "hm_d",
+      "group": "dextral",
+      "color": "#e34948",
+      "actuator": {
+        "type": "motor",
+        "max_force": 20
+      },
+      "path": [
+        "segment_1_plate_0_end_hm_tap",
+        "segment_10_plate_0_end_hm_tap"
+      ]
+    }
+  ]
+}

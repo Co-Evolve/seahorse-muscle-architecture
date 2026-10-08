@@ -1,0 +1,67 @@
+{
+  "format": "seahorse-tendon-config",
+  "version": 1,
+  "name": "test fork 1->5->9 + 10",
+  "description": "Fork from a via point, second tendon with two branches (one from the start point).",
+  "params": {},
+  "free_points": [],
+  "tendons": [
+    {
+      "name": "hm_dextral",
+      "group": "dextral",
+      "color": "#3b82f6",
+      "width": 0.001,
+      "damping": 0.01,
+      "stiffness": 0,
+      "actuator": {
+        "type": "motor",
+        "max_force": 10
+      },
+      "path": [
+        "segment_1_plate_0_end_hm_tap",
+        "segment_5_plate_0_intermediate_hm_tap_3",
+        "segment_9_plate_0_end_hm_tap"
+      ],
+      "branches": [
+        {
+          "from": 1,
+          "path": [
+            "segment_8_plate_0_intermediate_hm_tap_5",
+            "segment_10_plate_0_end_hm_tap"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "hm_sinistral",
+      "group": "sinistral",
+      "color": "#eb6834",
+      "width": 0.001,
+      "damping": 0.01,
+      "stiffness": 0,
+      "actuator": {
+        "type": "motor",
+        "max_force": 10
+      },
+      "path": [
+        "segment_1_plate_1_end_hm_tap",
+        "segment_5_plate_1_intermediate_hm_tap_3",
+        "segment_9_plate_1_end_hm_tap"
+      ],
+      "branches": [
+        {
+          "from": 1,
+          "path": [
+            "segment_10_plate_1_end_hm_tap"
+          ]
+        },
+        {
+          "from": 0,
+          "path": [
+            "segment_3_plate_1_intermediate_hm_tap_2"
+          ]
+        }
+      ]
+    }
+  ]
+}
